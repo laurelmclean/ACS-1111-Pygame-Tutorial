@@ -14,6 +14,9 @@ lanes = [93, 218, 343]
 # points
 points = 0
 
+# high score
+high_score = 0
+
 def draw_text(text, color, font_size, x, y):
     font = pygame.font.SysFont(None, font_size)
     img = font.render(text, True, color)
@@ -233,11 +236,14 @@ while running:
         fruit.reset()
     # Check collision player and bomb
     if pygame.sprite.collide_rect(player, bomb):
+        if points > high_score:
+          high_score = points
         points = 0
         pygame.mixer.Sound.play(explosion)
         bomb.reset()
      # Draw the points
     draw_text(text=f'Points: {points}', color= (0, 0, 0), font_size=24, x=20, y=20)
+    draw_text(text=f'High Score: {high_score}', color= (0, 0, 0), font_size=24, x=370, y=20)
 # Update the window
     pygame.display.flip()
     # tick the clock!
