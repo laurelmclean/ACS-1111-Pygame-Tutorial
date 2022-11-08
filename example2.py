@@ -1,8 +1,14 @@
 # Example 2
 
 # Import and initialize pygame
+from random import randint
 import pygame
 pygame.init()
+
+
+# Get the clock
+clock = pygame.time.Clock()
+
 # Configure the screen
 screen = pygame.display.set_mode([500, 500])
 
@@ -17,9 +23,30 @@ class GameObject(pygame.sprite.Sprite):
   def render(self, screen):
     screen.blit(self.surf, (self.x, self.y))
 
+# class extends GameObject
+# generates random number for x position and always starts a y 0
+class Apple(GameObject):
+ def __init__(self):
+   super(Apple, self).__init__(0, 0, 'apple.png')
+   self.dx = 0
+   self.dy = (randint(0, 200) / 100) + 1
+   self.reset()  # call reset here!
+
+ def move(self):
+   self.x += self.dx
+   self.y += self.dy
+   # Check the y position of the apple
+   if self.y > 500:
+     self.reset()
+
+ # add a new method
+#  move an Apple back to the top of the screen after moving off the bottom and give it a new random x.
+ def reset(self):
+   self.x = randint(50, 400)
+   self.y = -64
 
 # Make an instance of image
-apple = GameObject(120, 300, 'apple.png')
+apple = Apple()
 
 # strawberry
 strawberry = GameObject(400, 100, 'strawberry.png')
@@ -45,9 +72,16 @@ while running:
   # Clear screen
   screen.fill((255, 255, 255))
   # add image
+  # update position of object each frame
+  # You can control the speed of an object by how many pixels it moves in each frame.
+  # Draw apple
+  apple.move()
   apple.render(screen)
   strawberry.render(screen)
   # Update the window
   pygame.display.flip()
+  # tick the clock!
+  # saying the next update should be applied in 1/30th of a second.
+  clock.tick(60)  
 
   
