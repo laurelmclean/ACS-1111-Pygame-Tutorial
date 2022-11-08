@@ -51,6 +51,46 @@ apple = Apple()
 # strawberry
 strawberry = GameObject(400, 100, 'strawberry.png')
 
+
+class Player(GameObject):
+  # A Player instance will inherit the x and y attributes and the render method.
+  def __init__(self):
+    super(Player, self).__init__(0, 0, 'player.png')
+    # Player adds the dx and dy attributes.
+    self.dx = 0
+    self.dy = 0
+    self.reset()
+
+
+  def left(self):
+    self.dx -= 100
+
+
+  def right(self):
+    self.dx += 100
+
+
+  def up(self):
+    self.dy -= 100
+
+
+  def down(self):
+    self.dy += 100
+
+# Player implements the move() method. This method updates the player's position in each frame.
+# slow down player as it approaches target
+  def move(self):
+    self.x -= (self.x - self.dx) * 0.25
+    self.y -= (self.y - self.dy) * 0.25
+
+# Player implements the reset() method which will move it to the center of the screen.
+  def reset(self):
+    self.x = 250 - 32
+    self.y = 250 - 32
+
+# make an instance of Player
+player = Player()
+
 # Create a new instance of Surface
 # Using a surface we display more than just rectangles and circles. A surface can also display image files.
 # surf = pygame.Surface((50, 50))
@@ -63,6 +103,18 @@ while running:
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
       running = False
+      # Check for event type KEYBOARD
+    elif event.type == pygame.KEYDOWN:
+      if event.key == pygame.K_ESCAPE:
+        running = False
+      elif event.key == pygame.K_LEFT:
+        player.left()
+      elif event.key == pygame.K_RIGHT:
+        player.right()
+      elif event.key == pygame.K_UP:
+        player.up()
+      elif event.key == pygame.K_DOWN:
+        player.down()
 
   # Clear screen
   screen.fill((255, 255, 255))
@@ -77,7 +129,10 @@ while running:
   # Draw apple
   apple.move()
   apple.render(screen)
-  strawberry.render(screen)
+
+  # Draw player
+  player.move()
+  player.render(screen)
   # Update the window
   pygame.display.flip()
   # tick the clock!
