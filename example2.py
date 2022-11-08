@@ -11,13 +11,17 @@ screen = pygame.display.set_mode([500, 500])
 
 lanes = [93, 218, 343]
 
+# points
 points = 0
-
 
 def draw_text(text, color, font_size, x, y):
     font = pygame.font.SysFont(None, font_size)
     img = font.render(text, True, color)
     screen.blit(img, (x, y))
+
+# sound effects
+explosion = pygame.mixer.Sound("explosion.wav")
+coin = pygame.mixer.Sound("coin.wav")
 
 # Make a Game Object class that draws a rectangle.
 
@@ -225,10 +229,12 @@ while running:
     fruit = pygame.sprite.spritecollideany(player, fruit_sprites)
     if fruit:
         points += 1
+        pygame.mixer.Sound.play(coin)
         fruit.reset()
     # Check collision player and bomb
     if pygame.sprite.collide_rect(player, bomb):
         points = 0
+        pygame.mixer.Sound.play(explosion)
         bomb.reset()
      # Draw the points
     draw_text(text=f'Points: {points}', color= (0, 0, 0), font_size=24, x=20, y=20)
