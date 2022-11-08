@@ -11,6 +11,14 @@ screen = pygame.display.set_mode([500, 500])
 
 lanes = [93, 218, 343]
 
+points = 0
+
+
+def draw_text(text, color, font_size, x, y):
+    font = pygame.font.SysFont(None, font_size)
+    img = font.render(text, True, color)
+    screen.blit(img, (x, y))
+
 # Make a Game Object class that draws a rectangle.
 
 
@@ -216,10 +224,14 @@ while running:
 # This method returns a sprite from the group that has collided with the test sprite.
     fruit = pygame.sprite.spritecollideany(player, fruit_sprites)
     if fruit:
+        points += 1
         fruit.reset()
     # Check collision player and bomb
     if pygame.sprite.collide_rect(player, bomb):
-        running = False
+        points = 0
+        bomb.reset()
+     # Draw the points
+    draw_text(text=f'Points: {points}', color= (0, 0, 0), font_size=24, x=20, y=20)
 # Update the window
     pygame.display.flip()
     # tick the clock!
